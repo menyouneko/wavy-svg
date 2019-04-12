@@ -1,0 +1,39 @@
+.wavy-svg-wrap {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  &.wavy-svg-stop .wavy-svg-container {
+    transform: scaleY(0.18);
+  }
+}
+
+.wavy-svg-container {
+  position: absolute;
+  transform-origin: 50% 100%;
+  transition: transform 1s ease;
+  transform: scaleY(1);
+  svg {
+    animation-name: WavySvgSlideToLeft;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(.22,.33,.86,.76);
+    vertical-align: middle;
+  }
+}
+
+.wavy-svg-container-base {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+
+
+@keyframes WavySvgSlideToLeft {
+  0% {
+    transform:translateX(0);
+  }
+  100% {
+    transform:translateX(-50%);
+  }
+}

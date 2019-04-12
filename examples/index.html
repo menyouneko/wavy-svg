@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src='../dist/wavy-svg.dev.js'></script>
+  <style>
+    .wrap {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .svg {
+      margin-right: 10px;
+      text-align: center;
+    }
+
+    .svg {
+      width: 200px;
+      height: 200px;
+      border: 1px solid #e2e2e2;
+    }
+
+    #svg2 {
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div id='svg1' class='svg'>
+    </div>
+    <div id='svg2' class='svg'>
+    </div>
+  </div>
+  <button id='run'>Run</button>
+  <button id='stop'>Stop</button>
+  <script>
+    function getRandomColor() {
+      let r = Math.round(Math.random() * 255), g = Math.round(Math.random() * 255), b = Math.round(Math.random() * 255), o = Math.random() * 0.8 + 0.2
+      return `rgba(${r}, ${g}, ${b}, ${o})`
+    }
+
+    // svg1
+    let instance1 = new WavySvg(document.getElementById('svg1'), {
+      waveHeight: 40, // default: 20
+      baseHeight: 20, // default: 0
+      color: getRandomColor(), //
+      curve: 20, // 
+      delay: Math.random() * 1 * 100, // animate delay time
+      duration: 2500 // animate duration
+    })
+
+    // svg2
+    let instance2 = new WavySvg(document.getElementById('svg2'), [{
+      waveHeight: 40, // default: 20
+      baseHeight: 60, // default: 0
+      color: getRandomColor(), //
+      curve: 20, // 
+      delay: Math.random() * 1 * 200, // animate delay time
+      duration: 2500 // animate duration
+    }, {
+      waveHeight: 30, // default: 20
+      baseHeight: 40, // default: 0
+      color: getRandomColor(), //
+      curve: 15, // 
+      delay: Math.random() * 1 * 300, // animate delay time
+      duration: 2500 // animate duration
+    }])
+
+    document.getElementById('run').addEventListener('click', () => {
+      [instance1, instance2].forEach(item => item.run())
+    })
+    document.getElementById('stop').addEventListener('click', () => {
+      [instance1, instance2].forEach(item => item.stop())
+    })
+  </script>
+</body>
+
+</html>
