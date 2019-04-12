@@ -121,8 +121,10 @@ var WavySvg = (function () {
   function () {
     // 0: stop, 1: active
     // svg wrap element
-    function WavySvg(_el, _options) {
+    function WavySvg(_el) {
       var _this = this;
+
+      var _options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       _classCallCheck(this, WavySvg);
 
@@ -233,15 +235,22 @@ var WavySvg = (function () {
 
   function createSvg(_ref3) {
     var width = _ref3.width,
-        waveHeight = _ref3.waveHeight,
-        baseHeight = _ref3.baseHeight,
-        color = _ref3.color,
-        _ref3$curve = _ref3.curve,
-        curve = _ref3$curve === void 0 ? 10 : _ref3$curve,
+        _ref3$waveHeight = _ref3.waveHeight,
+        waveHeight = _ref3$waveHeight === void 0 ? 20 : _ref3$waveHeight,
+        _ref3$baseHeight = _ref3.baseHeight,
+        baseHeight = _ref3$baseHeight === void 0 ? 0 : _ref3$baseHeight,
+        _ref3$color = _ref3.color,
+        color = _ref3$color === void 0 ? 'transparent' : _ref3$color,
+        curve = _ref3.curve,
         _ref3$delay = _ref3.delay,
         delay = _ref3$delay === void 0 ? 0 : _ref3$delay,
         _ref3$duration = _ref3.duration,
         duration = _ref3$duration === void 0 ? 2000 : _ref3$duration;
+
+    if (!curve) {
+      curve = !isNaN(waveHeight) ? waveHeight / 2 : 0;
+    }
+
     var name = "".concat(SVG_NAME, "-").concat(id);
     var wrap = document.createElement('div');
     wrap.setAttribute('class', SVG_MAIN_CLASS);
