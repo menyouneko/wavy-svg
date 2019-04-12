@@ -50,28 +50,29 @@
 
     // svg1
     let instance1 = new WavySvg(document.getElementById('svg1'), {
-      waveHeight: 40, // default: 20
-      baseHeight: 20, // default: 0
-      color: getRandomColor(), //
-      curve: 20, // 
-      delay: Math.random() * 1 * 100, // animate delay time
-      duration: 2500 // animate duration
+      waveHeight: 40,
+      baseHeight: 20,
+      color: getRandomColor(),
+      curve: 20,
+      delay: Math.random() * 1 * 100,
+      duration: 2500
     })
 
     // svg2
     let instance2 = new WavySvg(document.getElementById('svg2'), [{
-      waveHeight: 40, // default: 20
-      baseHeight: 60, // default: 0
-      curve: 20, // 
-      delay: Math.random() * 1 * 200, // animate delay time
-      duration: 2500 // animate duration
+      waveHeight: 40,
+      baseHeight: 60,
+      curve: 20,
+      color: getRandomColor(),
+      delay: Math.random() * 1 * 200,
+      duration: 2500
     }, {
-      waveHeight: 30, // default: 20
-      baseHeight: 40, // default: 0
-      color: getRandomColor(), //
-      curve: 15, // 
-      delay: Math.random() * 1 * 300, // animate delay time
-      duration: 2500 // animate duration
+      waveHeight: 30,
+      baseHeight: 40,
+      color: getRandomColor(),
+      curve: 15,
+      delay: Math.random() * 1 * 300,
+      duration: 2500
     }])
 
     document.getElementById('run').addEventListener('click', () => {
