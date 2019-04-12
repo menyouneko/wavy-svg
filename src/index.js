@@ -12,7 +12,7 @@ class WavySvg {
     height: 0
   }
 
-  constructor (el, options) {
+  constructor (el, options = {}) {
     if (el && options) {
       this.initWrap(el)
       this.createWave(options instanceof Array ? options : [options])
@@ -76,7 +76,7 @@ function createBase ({ baseHeight, color }) {
   return base
 }
 
-function createSvg ({ width, waveHeight, baseHeight, color, curve = 10, delay = 0, duration = 2000 }) {
+function createSvg ({ width, waveHeight = 20, baseHeight = 0, color = 'transparent', curve = 10, delay = 0, duration = 2000 }) {
   const name = `${SVG_NAME}-${id}`
   const wrap = document.createElement('div')
   wrap.setAttribute('class', SVG_MAIN_CLASS)
