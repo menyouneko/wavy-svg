@@ -1,5 +1,5 @@
 /*
- * wavy-svg v0.0.1
+ * wavy-svg v1.0.0
  * (c) 2019 Menyou
  * Released under the MIT License.
  */
@@ -102,6 +102,61 @@ var WavySvg = (function () {
   function warn(message) {
     console.warn(message);
   }
+  function hexToRgb(hex) {
+    var rgb = [];
+    var length = hex.length;
+    var temp = parseInt((length - 1) / 3);
+
+    for (var i = 1; i < length; i += temp) {
+      rgb.push(parseInt('0x' + hex.slice(i, i + temp)));
+    }
+
+    return rgb;
+  }
+
+  function getRGBValue() {
+    var rgb = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+    var match = rgb.replace(/\s+/g, '').match(/^(?:rgb(?:a)?)\(([\d(\.\d*),]*)\)$/);
+    return match ? match[1].split(',') : null;
+  }
+
+  function getColorValue(color) {
+    var res = [];
+
+    if (color.startsWith('rgb')) {
+      res = getRGBValue(color);
+    } else if (color.startsWith('#')) {
+      res = hexToRgb(color);
+    } else {
+      return null;
+    }
+
+    return res.map(function (v) {
+      return Number(v);
+    });
+  }
+
+  function getStepColor(_ref2) {
+    var start = _ref2.start,
+        end = _ref2.end,
+        total = _ref2.total,
+        step = _ref2.step;
+
+    if (start === end) {
+      return start;
+    } // 将 hex 转换为 rgb
+
+
+    var sColor = getColorValue(start);
+    var eColor = getColorValue(end);
+    var p = step / total; // 计算 R\G\B 每一步的差值
+
+    var rStep = eColor[0] - sColor[0];
+    var gStep = eColor[1] - sColor[1];
+    var bStep = eColor[2] - sColor[2];
+    var opacity = (eColor[3] || 1) - (sColor[3] || 1);
+    return "rgba(".concat(rStep * p + sColor[0], ", ").concat(gStep * p + sColor[1], ", ").concat(bStep + sColor[2], ", ").concat(opacity * p + (sColor[3] || 1), ")");
+  }
   function createElementNS(tagName) {
     return document.createElementNS('http://www.w3.org/2000/svg', tagName);
   }
@@ -115,6 +170,14 @@ var WavySvg = (function () {
   __$styleInject(".wavy-svg-wrap {\n  position: relative;\n  overflow: hidden;\n  z-index: 0;\n}\n.wavy-svg-wrap.wavy-svg-stop .wavy-svg-container {\n  transform: scaleY(0.18);\n}\n.wavy-svg-container {\n  position: absolute;\n  transform-origin: 50% 100%;\n  transition: transform 1s ease;\n  transform: scaleY(1);\n}\n.wavy-svg-container svg {\n  animation-name: WavySvgSlideToLeft;\n  animation-iteration-count: infinite;\n  animation-timing-function: cubic-bezier(0.22, 0.33, 0.86, 0.76);\n  vertical-align: middle;\n}\n.wavy-svg-container-base {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n@keyframes WavySvgSlideToLeft {\n  0% {\n    transform: translateX(0);\n  }\n  100% {\n    transform: translateX(-50%);\n  }\n}\n");
 
   var id = 1;
+  var defaultOptions = {
+    waveHeight: 20,
+    baseHeight: 0,
+    color: 'transparent',
+    delay: 0,
+    duration: 2000 // curve: 10
+
+  };
 
   var WavySvg =
   /*#__PURE__*/
@@ -159,20 +222,34 @@ var WavySvg = (function () {
         }
 
         for (var i = 0, l = options.length; i < l; i++) {
-          var option = options[i];
           var _this$size$width = _this.size.width,
-              width = _this$size$width === void 0 ? 0 : _this$size$width;
-          var _option$baseHeight = option.baseHeight,
-              baseHeight = _option$baseHeight === void 0 ? 0 : _option$baseHeight,
-              color = option.color;
-          var base = createBase({
-            width: width,
-            baseHeight: baseHeight,
-            color: color
-          });
-          var svg = createSvg(Object.assign({
+              width = _this$size$width === void 0 ? 0 : _this$size$width; // 默认值处理
+
+          var option = Object.assign({
             width: width
-          }, option));
+          }, defaultOptions, options[i]);
+          var baseHeight = option.baseHeight,
+              waveHeight = option.waveHeight,
+              color = option.color,
+              endColor = option.endColor,
+              curve = option.curve; // curve 默认值设置
+
+          if (!curve) {
+            option.curve = curve = !isNaN(waveHeight) ? waveHeight / 2 : 0;
+          }
+
+          if (!endColor) {
+            option.endColor = endColor = color;
+          }
+
+          option.middleColor = getStepColor({
+            start: color,
+            end: endColor,
+            total: waveHeight + baseHeight,
+            step: waveHeight
+          });
+          var base = createBase(option);
+          var svg = createSvg(option);
 
           _this.wrap.append(svg);
 
@@ -226,31 +303,28 @@ var WavySvg = (function () {
 
   function createBase(_ref2) {
     var baseHeight = _ref2.baseHeight,
-        color = _ref2.color;
+        endColor = _ref2.endColor,
+        middleColor = _ref2.middleColor;
     var base = document.createElement('div');
     base.setAttribute('class', SVG_BASE_CLASS);
-    base.setAttribute('style', "height: ".concat(baseHeight, "px;background-color:").concat(color, ";z-index: ").concat(id));
+
+    if (endColor !== middleColor) {
+      endColor = "linear-gradient(to bottom, ".concat(middleColor, ", ").concat(endColor, ")");
+    }
+
+    base.setAttribute('style', "height: ".concat(baseHeight, "px;background:").concat(endColor, ";z-index: ").concat(id));
     return base;
   }
 
   function createSvg(_ref3) {
     var width = _ref3.width,
-        _ref3$waveHeight = _ref3.waveHeight,
-        waveHeight = _ref3$waveHeight === void 0 ? 20 : _ref3$waveHeight,
-        _ref3$baseHeight = _ref3.baseHeight,
-        baseHeight = _ref3$baseHeight === void 0 ? 0 : _ref3$baseHeight,
-        _ref3$color = _ref3.color,
-        color = _ref3$color === void 0 ? 'transparent' : _ref3$color,
+        waveHeight = _ref3.waveHeight,
+        baseHeight = _ref3.baseHeight,
+        color = _ref3.color,
+        middleColor = _ref3.middleColor,
         curve = _ref3.curve,
-        _ref3$delay = _ref3.delay,
-        delay = _ref3$delay === void 0 ? 0 : _ref3$delay,
-        _ref3$duration = _ref3.duration,
-        duration = _ref3$duration === void 0 ? 2000 : _ref3$duration;
-
-    if (!curve) {
-      curve = !isNaN(waveHeight) ? waveHeight / 2 : 0;
-    }
-
+        delay = _ref3.delay,
+        duration = _ref3.duration;
     var name = "".concat(SVG_NAME, "-").concat(id);
     var wrap = document.createElement('div');
     wrap.setAttribute('class', SVG_MAIN_CLASS);
@@ -262,15 +336,24 @@ var WavySvg = (function () {
     svg.setAttribute('style', "animation-duration:".concat(duration / 1000, "s;animation-delay:").concat(delay / 1000, "s"));
     var defs = createElementNS('defs');
     var linearGradient = createElementNS('linearGradient');
+    linearGradient.setAttribute('id', name);
+    linearGradient.setAttribute('x1', '0');
+    linearGradient.setAttribute('y1', '0');
+    linearGradient.setAttribute('x2', '0');
+    linearGradient.setAttribute('y2', '100%');
     var stop1 = createElementNS('stop');
+    stop1.setAttribute('offset', '0');
+    stop1.setAttribute('stop-color', color);
     var stop2 = createElementNS('stop');
+    stop2.setAttribute('offset', '100%');
+    stop2.setAttribute('stop-color', middleColor);
     var path = createElementNS('path');
     path.setAttribute('d', creatSvgPath({
       width: width * 2,
       height: waveHeight,
       curve: curve
     }));
-    path.setAttribute('fill', color);
+    path.setAttribute('fill', "url(#".concat(name, ")"));
     linearGradient.appendChild(stop1);
     linearGradient.appendChild(stop2);
     defs.appendChild(linearGradient);

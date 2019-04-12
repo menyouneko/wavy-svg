@@ -1,8 +1,17 @@
-import { createElementNS, isDOM, getClientSize, warn, creatSvgPath } from './utils'
+import { createElementNS, isDOM, getClientSize, warn, creatSvgPath, getStepColor } from './utils'
 import { SVG_NAME, WRAP_CLASS, STOP_CLASS, SVG_MAIN_CLASS, SVG_BASE_CLASS } from './config'
 import './index.less'
 
 let id = 1
+
+const defaultOptions = {
+  waveHeight: 20,
+  baseHeight: 0,
+  color: 'transparent',
+  delay: 0,
+  duration: 2000
+  // curve: 10
+}
 
 class WavySvg {
   status = 1 // 0: stop, 1: active
@@ -36,11 +45,20 @@ class WavySvg {
       return
     }
     for (let i = 0, l = options.length; i < l; i++) {
-      const option = options[i]
       const { width = 0 } = this.size
-      let { baseHeight = 0, color } = option
-      const base = createBase({ width, baseHeight, color })
-      const svg = createSvg(Object.assign({ width }, option))
+      // 默认值处理
+      const option = Object.assign({ width }, defaultOptions, options[i])
+      let { baseHeight, waveHeight, color, endColor, curve } = option
+      // curve 默认值设置
+      if (!curve) {
+        option.curve = curve = !isNaN(waveHeight) ? waveHeight / 2 : 0
+      }
+      if (!endColor) {
+        option.endColor = endColor = color
+      }
+      option.middleColor = getStepColor({ start: color, end: endColor, total: waveHeight + baseHeight, step: waveHeight })
+      const base = createBase(option)
+      const svg = createSvg(option)
       this.wrap.append(svg)
       this.wrap.append(base)
       id++
@@ -69,17 +87,17 @@ function createWrap ({ width = 0, height = 0 }) {
   return wrap
 }
 
-function createBase ({ baseHeight, color }) {
+function createBase ({ baseHeight, endColor, middleColor }) {
   const base = document.createElement('div')
   base.setAttribute('class', SVG_BASE_CLASS)
-  base.setAttribute('style', `height: ${baseHeight}px;background-color:${color};z-index: ${id}`)
+  if (endColor !== middleColor) {
+    endColor = `linear-gradient(to bottom, ${middleColor}, ${endColor})`
+  }
+  base.setAttribute('style', `height: ${baseHeight}px;background:${endColor};z-index: ${id}`)
   return base
 }
 
-function createSvg ({ width, waveHeight = 20, baseHeight = 0, color = 'transparent', curve, delay = 0, duration = 2000 }) {
-  if (!curve) {
-    curve = !isNaN(waveHeight) ? waveHeight / 2 : 0
-  }
+function createSvg ({ width, waveHeight, baseHeight, color, middleColor, curve, delay, duration }) {
   const name = `${SVG_NAME}-${id}`
   const wrap = document.createElement('div')
   wrap.setAttribute('class', SVG_MAIN_CLASS)
@@ -93,11 +111,20 @@ function createSvg ({ width, waveHeight = 20, baseHeight = 0, color = 'transpare
 
   const defs = createElementNS('defs')
   const linearGradient = createElementNS('linearGradient')
+  linearGradient.setAttribute('id', name)
+  linearGradient.setAttribute('x1', '0')
+  linearGradient.setAttribute('y1', '0')
+  linearGradient.setAttribute('x2', '0')
+  linearGradient.setAttribute('y2', '100%')
   const stop1 = createElementNS('stop')
+  stop1.setAttribute('offset', '0')
+  stop1.setAttribute('stop-color', color)
   const stop2 = createElementNS('stop')
+  stop2.setAttribute('offset', '100%')
+  stop2.setAttribute('stop-color', middleColor)
   const path = createElementNS('path')
   path.setAttribute('d', creatSvgPath({ width: width * 2, height: waveHeight, curve }))
-  path.setAttribute('fill', color)
+  path.setAttribute('fill', `url(#${name})`)
   linearGradient.appendChild(stop1)
   linearGradient.appendChild(stop2)
   defs.appendChild(linearGradient)
