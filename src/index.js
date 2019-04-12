@@ -76,7 +76,10 @@ function createBase ({ baseHeight, color }) {
   return base
 }
 
-function createSvg ({ width, waveHeight = 20, baseHeight = 0, color = 'transparent', curve = 10, delay = 0, duration = 2000 }) {
+function createSvg ({ width, waveHeight = 20, baseHeight = 0, color = 'transparent', curve, delay = 0, duration = 2000 }) {
+  if (!curve) {
+    curve = !isNaN(waveHeight) ? waveHeight / 2 : 0
+  }
   const name = `${SVG_NAME}-${id}`
   const wrap = document.createElement('div')
   wrap.setAttribute('class', SVG_MAIN_CLASS)
