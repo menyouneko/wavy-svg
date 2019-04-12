@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
-  <script src='../dist/wavy-svg.min.js'></script>
+  <script src='../dist/wavy-svg.dev.js'></script>
   <style>
     .wrap {
       display: flex;
@@ -52,8 +52,8 @@
     let instance1 = new WavySvg(document.getElementById('svg1'), {
       waveHeight: 40,
       baseHeight: 20,
-      // endColor: getRandomColor(),
       color: getRandomColor(),
+      endColor: getRandomColor(),
       curve: 20,
       delay: Math.random() * 1 * 100,
       duration: 2500
@@ -63,16 +63,16 @@
     let instance2 = new WavySvg(document.getElementById('svg2'), [{
       waveHeight: 40,
       baseHeight: 60,
-      curve: 20,
       color: getRandomColor(),
       endColor: getRandomColor(),
+      curve: 20,
       delay: Math.random() * 1 * 200,
       duration: 2500
     }, {
       waveHeight: 30,
       baseHeight: 40,
-      endColor: getRandomColor(),
       color: getRandomColor(),
+      endColor: getRandomColor(),
       curve: 15,
       delay: Math.random() * 1 * 300,
       duration: 2500

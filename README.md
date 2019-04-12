@@ -61,6 +61,12 @@ options 为数组时，会生成多个 svg 图像，重叠关系为数组对象�
   // default: transparent
   color: string,
 
+  // 波浪线底部结束的颜色
+  // 设置 endColor 时, 会产生渐变色效果
+  // 注意使用渐变色时, color 和 endColor 均不能使用 red, green 等颜色字符串
+  // default: null
+  endColor: string,
+
   // 用于调整生成波浪的弯曲度（可以理解成振幅）, 值不能超过 waveHeight
   // default: waveHeight / 2 or 0
   curve: number,
@@ -98,7 +104,7 @@ let instance1 = new WavySvg(document.getElementById('svg1'), {
 
 ![使用案例 2](https://menyouneko.github.io/wavy-svg/examples/img/2.gif)
 ```html
-<div id='svg2' style='width: 200px; height: 200px;'>
+<div id='svg2' style='width: 200px; height: 200px; border-radius: 50%; overflow: hidden;'>
 </div>
 ```
 ```javascript
@@ -114,6 +120,32 @@ let instance2 = new WavySvg(document.getElementById('svg2'),  [{
   waveHeight: 30,
   baseHeight: 40,
   color: 'rgba(34, 169, 126, 0.5)',
+  curve: 15,
+  delay: Math.random() * 1 * 300,
+  duration: 2500
+}])
+```
+
+![使用案例 3](https://menyouneko.github.io/wavy-svg/examples/img/3.gif)
+```html
+<div id='svg3' style='width: 200px; height: 200px; border-radius: 50%; overflow: hidden;'>
+</div>
+```
+```javascript
+// svg1
+let instance3 = new WavySvg(document.getElementById('svg3'), [{
+  waveHeight: 40,
+  baseHeight: 100,
+  color: 'rgba(154, 42, 120, 0.3)',
+  endColor: 'rgba(254, 198, 115, 0.5)',
+  curve: 20,
+  delay: Math.random() * 1 * 200,
+  duration: 2500
+}, {
+  waveHeight: 30,
+  baseHeight: 60,
+  color: 'rgba(250, 49, 5, 0.5)',
+  endColor: 'rgba(247, 163, 101, 0.7)',
   curve: 15,
   delay: Math.random() * 1 * 300,
   duration: 2500
