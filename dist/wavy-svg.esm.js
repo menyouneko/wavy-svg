@@ -1,5 +1,5 @@
 /*
- * wavy-svg v0.0.2
+ * wavy-svg v0.0.1
  * (c) 2019 Menyou
  * Released under the MIT License.
  */
