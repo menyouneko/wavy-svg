@@ -4,3 +4,4 @@ demos
 .vscode/
 publish
 rollup.build.css
+.npmignore
