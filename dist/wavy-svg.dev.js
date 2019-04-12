@@ -1,5 +1,5 @@
 /*
- * wavy-svg v1.0.0
+ * wavy-svg v1.1.0
  * (c) 2019 Menyou
  * Released under the MIT License.
  */
@@ -149,13 +149,18 @@ var WavySvg = (function () {
 
     var sColor = getColorValue(start);
     var eColor = getColorValue(end);
-    var p = step / total; // 计算 R\G\B 每一步的差值
 
-    var rStep = eColor[0] - sColor[0];
-    var gStep = eColor[1] - sColor[1];
-    var bStep = eColor[2] - sColor[2];
-    var opacity = (eColor[3] || 1) - (sColor[3] || 1);
-    return "rgba(".concat(rStep * p + sColor[0], ", ").concat(gStep * p + sColor[1], ", ").concat(bStep + sColor[2], ", ").concat(opacity * p + (sColor[3] || 1), ")");
+    if (sColor && eColor) {
+      var p = step / total; // 计算 R\G\B 每一步的差值
+
+      var rStep = eColor[0] - sColor[0];
+      var gStep = eColor[1] - sColor[1];
+      var bStep = eColor[2] - sColor[2];
+      var opacity = (eColor[3] || 1) - (sColor[3] || 1);
+      return "rgba(".concat(rStep * p + sColor[0], ", ").concat(gStep * p + sColor[1], ", ").concat(bStep + sColor[2], ", ").concat(opacity * p + (sColor[3] || 1), ")");
+    } else {
+      return null;
+    }
   }
   function createElementNS(tagName) {
     return document.createElementNS('http://www.w3.org/2000/svg', tagName);
@@ -303,12 +308,13 @@ var WavySvg = (function () {
 
   function createBase(_ref2) {
     var baseHeight = _ref2.baseHeight,
+        color = _ref2.color,
         endColor = _ref2.endColor,
         middleColor = _ref2.middleColor;
     var base = document.createElement('div');
     base.setAttribute('class', SVG_BASE_CLASS);
 
-    if (endColor !== middleColor) {
+    if (middleColor && endColor !== middleColor) {
       endColor = "linear-gradient(to bottom, ".concat(middleColor, ", ").concat(endColor, ")");
     }
 
@@ -346,7 +352,7 @@ var WavySvg = (function () {
     stop1.setAttribute('stop-color', color);
     var stop2 = createElementNS('stop');
     stop2.setAttribute('offset', '100%');
-    stop2.setAttribute('stop-color', middleColor);
+    stop2.setAttribute('stop-color', middleColor || color);
     var path = createElementNS('path');
     path.setAttribute('d', creatSvgPath({
       width: width * 2,
