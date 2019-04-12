@@ -87,10 +87,10 @@ function createWrap ({ width = 0, height = 0 }) {
   return wrap
 }
 
-function createBase ({ baseHeight, endColor, middleColor }) {
+function createBase ({ baseHeight, color, endColor, middleColor }) {
   const base = document.createElement('div')
   base.setAttribute('class', SVG_BASE_CLASS)
-  if (endColor !== middleColor) {
+  if (middleColor && endColor !== middleColor) {
     endColor = `linear-gradient(to bottom, ${middleColor}, ${endColor})`
   }
   base.setAttribute('style', `height: ${baseHeight}px;background:${endColor};z-index: ${id}`)
@@ -121,7 +121,7 @@ function createSvg ({ width, waveHeight, baseHeight, color, middleColor, curve, 
   stop1.setAttribute('stop-color', color)
   const stop2 = createElementNS('stop')
   stop2.setAttribute('offset', '100%')
-  stop2.setAttribute('stop-color', middleColor)
+  stop2.setAttribute('stop-color', middleColor || color)
   const path = createElementNS('path')
   path.setAttribute('d', creatSvgPath({ width: width * 2, height: waveHeight, curve }))
   path.setAttribute('fill', `url(#${name})`)

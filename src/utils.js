@@ -71,15 +71,19 @@ export function getStepColor ({ start, end, total, step }) {
   let sColor = getColorValue(start)
   let eColor = getColorValue(end)
 
-  let p = step / total
+  if (sColor && eColor) {
+    let p = step / total
 
-  // 计算 R\G\B 每一步的差值
-  let rStep = (eColor[0] - sColor[0])
-  let gStep = (eColor[1] - sColor[1])
-  let bStep = (eColor[2] - sColor[2])
-  let opacity = (eColor[3] || 1) - (sColor[3] || 1)
+    // 计算 R\G\B 每一步的差值
+    let rStep = (eColor[0] - sColor[0])
+    let gStep = (eColor[1] - sColor[1])
+    let bStep = (eColor[2] - sColor[2])
+    let opacity = (eColor[3] || 1) - (sColor[3] || 1)
 
-  return `rgba(${rStep * p + sColor[0]}, ${gStep * p + sColor[1]}, ${bStep + sColor[2]}, ${opacity * p + (sColor[3] || 1)})`
+    return `rgba(${rStep * p + sColor[0]}, ${gStep * p + sColor[1]}, ${bStep + sColor[2]}, ${opacity * p + (sColor[3] || 1)})`
+  } else {
+    return null
+  }
 }
 
 export function createElementNS (tagName) {
