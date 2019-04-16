@@ -5,7 +5,7 @@
 ## 1、安装
 ① script 标签
 ```html
-<script src='/your/file/dir/wavy-svg.min.js'></script>
+<script src='/your/path/to/wavy-svg.min.js'></script>
 ```
 ② NPM 安装
 ```
