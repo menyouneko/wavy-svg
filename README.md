@@ -1,6 +1,6 @@
 # A simple SVG wavy line component
 Based on SVG + CSS<br>
-[中文](https://github.com/menyouneko/wavy-svg/blob/master/README_CN.md)
+[[中文文档](https://github.com/menyouneko/wavy-svg/blob/master/README_CN.md)]
 
 ## 1、Install
 ① script tag

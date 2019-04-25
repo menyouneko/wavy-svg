@@ -1,6 +1,6 @@
 # 一个简单的 SVG 波浪线组件
 基于 SVG + CSS 实现<br>
-[English](https://github.com/menyouneko/wavy-svg/blob/master/README.md)
+[[English Doc](https://github.com/menyouneko/wavy-svg/blob/master/README.md)]
 
 ## 1、安装
 ① script 标签
