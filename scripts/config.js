@@ -17,7 +17,7 @@ const banner =
 
 const resolve = p => path.resolve(__dirname, '../', p)
 
-function strTrans (str) {
+function strTrans(str) {
   let arr = str.split('-')
   for (let i = 0, l = arr.length; i < l; i++) {
     arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].substring(1)
@@ -54,7 +54,7 @@ const builds = {
     env: 'production',
     banner
   },
-  publisj: {
+  publish: {
     entry: resolve('src/index.js'),
     dest: resolve(`publish/index.js`),
     format: 'esm',
@@ -63,7 +63,7 @@ const builds = {
   }
 }
 
-function genConfig (name) {
+function genConfig(name) {
   const opts = builds[name]
   return {
     input: opts.entry,
