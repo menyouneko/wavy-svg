@@ -1,42 +1,42 @@
-# A simple SVG wavy line component
-Based on SVG + CSS<br>
-[[中文文档](https://github.com/menyouneko/wavy-svg/blob/master/README_CN.md)]
+# 一个简单的 SVG 波浪线组件
+基于 SVG + CSS 实现<br>
+[[English Doc](https://github.com/menyouneko/wavy-svg/blob/master/README.md)]
 
-## 1、Install
-① script tag
+## 1、安装
+① script 标签
 ```html
 <script src='/your/path/to/wavy-svg.min.js'></script>
 ```
-② NPM install
+② NPM 安装
 ```
 npm i wavy-svg
 ```
-then
+然后
 ```javascript
 import WavySvg from 'wavy-svg'
 ```
 
 
-## 2、Use
-① create WavySvg instance
+## 2、使用
+① 创建 WavySvg 实例
 ```javascript
-const el = document.getElementById('svg1') // Or you can use the $refs reference in vue
-const svgInstance = new WavySvg(el, { // params
+const el = document.getElementById('svg1') // 或者使用 vue 中的 $refs 引用也可以
+const svgInstance = new WavySvg(el, {
   color: 'green'
 })
 ```
-② pause
+② 暂停
 ```javascript
 svgInstance.stop()
 ```
-③ restart after pausing
+③ 暂停后重新启动
 ```javascript
 svgInstance.run()
 ```
 
-## 3、Parameter List
-WavgSvg accepts two arguments, the first being a required DOM argument and the second being an optional options object.
-```javascript
+## 3、参数一览
+WavgSvg 接受两个参数，第一个是必填的 DOM 参数，第二个是可选的 options 对象。
+```javaascript
 new WavySvg(el, ?options)
 ```
 ① el <br>
@@ -45,46 +45,47 @@ el: HTMLNodeElement
 ```
 
 ② options <br>
-Options can be an object, or you can wrap multiple objects with an array, <br>
-When options is an array, multiple svg images are generated, and the svg image order is the order of the arrays.
+options 可以为一个 object 对象，也可以用数组包裹多个 object 对象， <br>
+options 为数组时，会生成多个 svg 图像，重叠关系为数组对象的顺序。
 ```js
 {
-  // Wave height
+  // 波浪的高度
   // default: 20
   waveHeight: number,
 
-  // In addition to the svg wave line, the height of the base, please refer to the description below.
+  // 除开 svg 波浪线, 底座的高度, 参考下图的说明
   // default: 0
   baseHeight: number,
 
-  // Wavy line color
+  // 波浪线的颜色
   // default: transparent
   color: string,
 
-  // Gradient effect is produced when endColor is set.
-  // Note that when using gradients, color and endColor cannot use color strings such as red, green, etc.
+  // 波浪线底部结束的颜色
+  // 设置 endColor 时, 会产生渐变色效果
+  // 注意使用渐变色时, color 和 endColor 均不能使用 red, green 等颜色字符串
   // default: null
   endColor: string,
 
-  // Used to adjust the curvature of the generated wave (can be understood as amplitude), the value cannot exceed the waveHeight.
+  // 用于调整生成波浪的弯曲度（可以理解成振幅）, 值不能超过 waveHeight
   // default: waveHeight / 2 or 0
   curve: number,
 
-  // Delay in animation motion, in ms.
+  // 动画运动时的延时, 单位 ms
   // default: 0
   delay number,
 
-  // The duration of a motion cycle, in ms.
+  // 一个运动周期持续的时间, 单位 ms
   // default: 2000
   duration: number
 }
 ```
-![baseHeight description](https://menyouneko.github.io/wavy-svg/examples/img/Snipaste_2019-04-12_14-26-42.png)
+![baseHeight 说明](https://menyouneko.github.io/wavy-svg/examples/img/Snipaste_2019-04-12_14-26-42.png)
 
-## 4、Example
-[demo address](https://menyouneko.github.io/wavy-svg/examples/index.html)
+## 4、示例
+[Demo 地址](https://menyouneko.github.io/wavy-svg/examples/index.html)
 
-![use cases 1](https://menyouneko.github.io/wavy-svg/examples/img/1.gif)
+![使用案例 1](https://menyouneko.github.io/wavy-svg/examples/img/1.gif)
 ```html
 <div id='svg1' style='width: 200px; height: 200px;'>
 </div>
@@ -101,7 +102,7 @@ let instance1 = new WavySvg(document.getElementById('svg1'), {
 })
 ```
 
-![use cases 2](https://menyouneko.github.io/wavy-svg/examples/img/2.gif)
+![使用案例 2](https://menyouneko.github.io/wavy-svg/examples/img/2.gif)
 ```html
 <div id='svg2' style='width: 200px; height: 200px; border-radius: 50%; overflow: hidden;'>
 </div>
@@ -125,7 +126,7 @@ let instance2 = new WavySvg(document.getElementById('svg2'),  [{
 }])
 ```
 
-![use cases 3](https://menyouneko.github.io/wavy-svg/examples/img/3.gif)
+![使用案例 3](https://menyouneko.github.io/wavy-svg/examples/img/3.gif)
 ```html
 <div id='svg3' style='width: 200px; height: 200px; border-radius: 50%; overflow: hidden;'>
 </div>
@@ -151,4 +152,4 @@ let instance3 = new WavySvg(document.getElementById('svg3'), [{
 }])
 ```
 
-Pause and run call the stop and run of the instance.
+暂停和运动调用实例的 stop 和 run 即可

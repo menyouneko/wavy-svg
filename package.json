@@ -1,7 +1,7 @@
 {
   "name": "wavy-svg",
-  "version": "1.1.0",
-  "description": "A simple wave line component.",
+  "version": "1.1.2",
+  "description": "🌊A simple wave component.",
   "main": "index.js",
   "keywords": [
     "wave",
