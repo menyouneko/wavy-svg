@@ -16,6 +16,7 @@ const defaultOptions = {
 class WavySvg {
   status = 1 // 0: stop, 1: active
   wrap = null // svg wrap element
+  // wavy size
   size = {
     width: 0,
     height: 0
